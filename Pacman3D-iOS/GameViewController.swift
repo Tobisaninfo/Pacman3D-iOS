@@ -9,9 +9,14 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import CoreMotion
 
 class GameViewController: UIViewController {
 
+    var motionManager: CMMotionManager?
+    
+    var isRotating: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,6 +76,26 @@ class GameViewController: UIViewController {
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
+        
+        motionManager = CMMotionManager()
+        if (motionManager?.isAccelerometerAvailable)! {
+            motionManager?.accelerometerUpdateInterval = 0.1
+            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
+                let rotate = data!.acceleration.y
+                //print(rotate)
+                let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+                let direction: Float = rotate < 0 ? 1.0 : -1.0
+                if abs(rotate) > 0.3 {
+                    if !self.isRotating {
+                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
+                        pacman.runAction(action)
+                        self.isRotating = true
+                    }
+                } else {
+                    self.isRotating = false
+                }
+            })
+        }
     }
     
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
@@ -109,7 +134,7 @@ class GameViewController: UIViewController {
     }
     
     override var shouldAutorotate: Bool {
-        return false
+        return true
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -118,7 +143,7 @@ class GameViewController: UIViewController {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return .portrait
+            return .landscape
         } else {
             return .all
         }
