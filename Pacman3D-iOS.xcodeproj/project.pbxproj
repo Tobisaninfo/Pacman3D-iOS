@@ -15,6 +15,9 @@
 		F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */; };
 		F6BEB81E1EF7F99B00EDAA66 /* Pacman3D_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB81D1EF7F99B00EDAA66 /* Pacman3D_iOSTests.swift */; };
 		F6BEB8291EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB8281EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift */; };
+		F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7151EF80AD500C1DE35 /* Level.swift */; };
+		F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */; };
+		F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */ = {isa = PBXBuildFile; fileRef = F6FEE71A1EF8135200C1DE35 /* level.plv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		F6BEB8241EF7F99C00EDAA66 /* Pacman3D-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pacman3D-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6BEB8281EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pacman3D_iOSUITests.swift; sourceTree = "<group>"; };
 		F6BEB82A1EF7F99C00EDAA66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F6FEE7151EF80AD500C1DE35 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
+		F6FEE71A1EF8135200C1DE35 /* level.plv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level.plv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,8 @@
 		F6BEB8051EF7F99B00EDAA66 /* Pacman3D-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				F6FEE7141EF80AB900C1DE35 /* Level */,
+				F6FEE7191EF80C1900C1DE35 /* Uilts */,
 				F6BEB8061EF7F99B00EDAA66 /* AppDelegate.swift */,
 				F6BEB8081EF7F99B00EDAA66 /* art.scnassets */,
 				F6BEB80A1EF7F99B00EDAA66 /* GameViewController.swift */,
@@ -106,6 +114,7 @@
 				F6BEB80F1EF7F99B00EDAA66 /* Assets.xcassets */,
 				F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */,
 				F6BEB8141EF7F99B00EDAA66 /* Info.plist */,
+				F6FEE71A1EF8135200C1DE35 /* level.plv */,
 			);
 			path = "Pacman3D-iOS";
 			sourceTree = "<group>";
@@ -126,6 +135,22 @@
 				F6BEB82A1EF7F99C00EDAA66 /* Info.plist */,
 			);
 			path = "Pacman3D-iOSUITests";
+			sourceTree = "<group>";
+		};
+		F6FEE7141EF80AB900C1DE35 /* Level */ = {
+			isa = PBXGroup;
+			children = (
+				F6FEE7151EF80AD500C1DE35 /* Level.swift */,
+			);
+			name = Level;
+			sourceTree = "<group>";
+		};
+		F6FEE7191EF80C1900C1DE35 /* Uilts */ = {
+			isa = PBXGroup;
+			children = (
+				F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */,
+			);
+			name = Uilts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -242,6 +267,7 @@
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
 				F6BEB80E1EF7F99B00EDAA66 /* Main.storyboard in Resources */,
+				F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +292,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */,
+				F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */,
 				F6BEB80B1EF7F99B00EDAA66 /* GameViewController.swift in Sources */,
 				F6BEB8071EF7F99B00EDAA66 /* AppDelegate.swift in Sources */,
 			);
@@ -520,6 +548,7 @@
 				F6BEB82F1EF7F99C00EDAA66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F6BEB8301EF7F99C00EDAA66 /* Build configuration list for PBXNativeTarget "Pacman3D-iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +557,7 @@
 				F6BEB8321EF7F99C00EDAA66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F6BEB8331EF7F99C00EDAA66 /* Build configuration list for PBXNativeTarget "Pacman3D-iOSUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +566,7 @@
 				F6BEB8351EF7F99C00EDAA66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

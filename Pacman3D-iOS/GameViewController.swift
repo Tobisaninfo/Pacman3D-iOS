@@ -15,6 +15,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let level = Level(named: "level")
+        
         // create a new scene
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
@@ -25,6 +27,17 @@ class GameViewController: UIViewController {
         
         // place the camera
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        
+        for (y, line) in level.data.enumerated() {
+            for (x, block) in line.enumerated() {
+                if block == .wall {
+                    let box = SCNBox(width: 5, height: 5, length: 5, chamferRadius: 0)
+                    let node = SCNNode(geometry: box)
+                    node.position = SCNVector3(x: Float(x * 5), y: 2.5, z:Float(y * 5))
+                    scene.rootNode.addChildNode(node)
+                }
+            }
+        }
         
 //        // create and add a light to the scene
 //        let lightNode = SCNNode()
@@ -47,7 +60,7 @@ class GameViewController: UIViewController {
         scnView.scene = scene
         
         // allows the user to manipulate the camera
-        scnView.allowsCameraControl = false
+        scnView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
         scnView.showsStatistics = true
