@@ -18,6 +18,9 @@
 		F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7151EF80AD500C1DE35 /* Level.swift */; };
 		F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */; };
 		F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */ = {isa = PBXBuildFile; fileRef = F6FEE71A1EF8135200C1DE35 /* level.plv */; };
+		F6FEE71F1EF8379600C1DE35 /* run.png in Resources */ = {isa = PBXBuildFile; fileRef = F6FEE71E1EF8379600C1DE35 /* run.png */; };
+		F6FEE7211EF83C1300C1DE35 /* Opterators.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7201EF83C1300C1DE35 /* Opterators.swift */; };
+		F6FEE7231EF83DAF00C1DE35 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7221EF83DAF00C1DE35 /* Player.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		F6FEE7151EF80AD500C1DE35 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F6FEE71A1EF8135200C1DE35 /* level.plv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level.plv; sourceTree = "<group>"; };
+		F6FEE71E1EF8379600C1DE35 /* run.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run.png; sourceTree = "<group>"; };
+		F6FEE7201EF83C1300C1DE35 /* Opterators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Opterators.swift; sourceTree = "<group>"; };
+		F6FEE7221EF83DAF00C1DE35 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +121,7 @@
 				F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */,
 				F6BEB8141EF7F99B00EDAA66 /* Info.plist */,
 				F6FEE71A1EF8135200C1DE35 /* level.plv */,
+				F6FEE71E1EF8379600C1DE35 /* run.png */,
 			);
 			path = "Pacman3D-iOS";
 			sourceTree = "<group>";
@@ -141,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				F6FEE7151EF80AD500C1DE35 /* Level.swift */,
+				F6FEE7221EF83DAF00C1DE35 /* Player.swift */,
 			);
 			name = Level;
 			sourceTree = "<group>";
@@ -149,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */,
+				F6FEE7201EF83C1300C1DE35 /* Opterators.swift */,
 			);
 			name = Uilts;
 			sourceTree = "<group>";
@@ -264,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6BEB8091EF7F99B00EDAA66 /* art.scnassets in Resources */,
+				F6FEE71F1EF8379600C1DE35 /* run.png in Resources */,
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
 				F6BEB80E1EF7F99B00EDAA66 /* Main.storyboard in Resources */,
@@ -296,6 +306,8 @@
 				F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */,
 				F6BEB80B1EF7F99B00EDAA66 /* GameViewController.swift in Sources */,
 				F6BEB8071EF7F99B00EDAA66 /* AppDelegate.swift in Sources */,
+				F6FEE7231EF83DAF00C1DE35 /* Player.swift in Sources */,
+				F6FEE7211EF83C1300C1DE35 /* Opterators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

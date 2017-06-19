@@ -9,13 +9,17 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SKSceneDelegate {
 
     var motionManager: CMMotionManager?
+    var scene: SCNScene!
     
     var isRotating: Bool = false
+    
+    var direction: Player.Direction = .north
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +27,7 @@ class GameViewController: UIViewController {
         let level = Level(named: "level")
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        scene = SCNScene(named: "art.scnassets/ship.scn")!
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -65,7 +69,7 @@ class GameViewController: UIViewController {
         scnView.scene = scene
         
         // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
+        scnView.allowsCameraControl = false
         
         // show statistics such as fps and timing information
         scnView.showsStatistics = true
@@ -83,53 +87,52 @@ class GameViewController: UIViewController {
             motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
                 let rotate = data!.acceleration.y
                 //print(rotate)
-                let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
                 let direction: Float = rotate < 0 ? 1.0 : -1.0
                 if abs(rotate) > 0.3 {
                     if !self.isRotating {
                         let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
                         pacman.runAction(action)
                         self.isRotating = true
+                        
+                        var directionVal = self.direction.rawValue + Int(direction)
+                        if directionVal == 5 {
+                            directionVal = 1
+                        }
+                        if directionVal == 0 {
+                            directionVal = 4
+                        }
+                        self.direction = Player.Direction(rawValue: directionVal)!
                     }
                 } else {
                     self.isRotating = false
                 }
             })
         }
+        if let view = self.view as? SCNView {
+            view.overlaySKScene = createOverlay()
+        }
+    }
+    
+    func createOverlay() -> SKScene {
+        let scene = SKScene(size: self.view.frame.size)
+        let node = SKSpriteNode(imageNamed: "run.png")
+        node.position = CGPoint(x: 100, y: 100)
+        node.size = CGSize(width: 50, height: 100)
+        scene.addChild(node)
+        return scene
     }
     
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // check what nodes are tapped
-        let p = gestureRecognize.location(in: scnView)
-        let hitResults = scnView.hitTest(p, options: [:])
-        // check that we clicked on at least one object
-        if hitResults.count > 0 {
-            // retrieved the first clicked object
-            let result: AnyObject = hitResults[0]
-            
-            // get its material
-            let material = result.node!.geometry!.firstMaterial!
-            
-            // highlight it
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            
-            // on completion - unhighlight
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
-            }
-            
-            material.emission.contents = UIColor.red
-            
-            SCNTransaction.commit()
+        let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+        if direction == .north {
+            pacman.position.x += 5
+        } else if direction == .east {
+            pacman.position.z -= 5
+        } else if direction == .south {
+            pacman.position.x -= 5
+        } else if direction == .west {
+            pacman.position.z += 5
         }
     }
     
