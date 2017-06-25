@@ -40,9 +40,9 @@ class GameViewController: UIViewController, SKSceneDelegate {
         for (y, line) in level.data.enumerated() {
             for (x, block) in line.enumerated() {
                 if block == .wall {
-                    let box = SCNBox(width: 5, height: 5, length: 5, chamferRadius: 0)
+                    let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
                     let node = SCNNode(geometry: box)
-                    node.position = SCNVector3(x: Float(x * 5), y: 2.5, z:Float(y * 5))
+                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(y * 5))
                     scene.rootNode.addChildNode(node)
                 }
             }
@@ -119,7 +119,7 @@ class GameViewController: UIViewController, SKSceneDelegate {
         let node = SKSpriteNode(imageNamed: "run.png")
         node.position = CGPoint(x: 100, y: 100)
         node.size = CGSize(width: 50, height: 100)
-        scene.addChild(node)
+        //scene.addChild(node)
         return scene
     }
     
