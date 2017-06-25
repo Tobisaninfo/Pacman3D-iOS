@@ -15,4 +15,7 @@ class Player {
         case south
         case west
     }
+    
+    var points: Int = 0
+    var life: Int = 3
 }

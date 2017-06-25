@@ -24,6 +24,11 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
     
     var direction: Player.Direction = .north
     
+    // overlay
+    var pointsLabel: SKLabelNode!
+    var lifeLabel: SKLabelNode!
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -92,7 +97,7 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         scnView.allowsCameraControl = false
         
         // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        scnView.showsStatistics = false
         
         // configure the view
         scnView.backgroundColor = UIColor.black
@@ -213,11 +218,19 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
     }
     
     func createOverlay() -> SKScene {
-        let scene = SKScene(size: self.view.frame.size)
-        let node = SKSpriteNode(imageNamed: "run.png")
-        node.position = CGPoint(x: 100, y: 100)
-        node.size = CGSize(width: 50, height: 100)
-        //scene.addChild(node)
+        let scene = SKScene(size: CGSize(width: self.view.frame.size.height, height: self.view.frame.size.width))
+        pointsLabel = SKLabelNode(fontNamed: "Chalkduster")
+        pointsLabel.text = "0 Punkte"
+        pointsLabel.fontColor = UIColor.red
+        pointsLabel.position = CGPoint(x: 100, y: self.view.frame.width - 30)
+        scene.addChild(pointsLabel)
+        
+        lifeLabel = SKLabelNode(fontNamed: "Chalkduster")
+        lifeLabel.text = "♥️♥️♥️"
+        lifeLabel.horizontalAlignmentMode = .right
+        lifeLabel.fontColor = UIColor.red
+        lifeLabel.position = CGPoint(x: self.view.frame.height - 50, y: 5)
+        scene.addChild(lifeLabel)
         return scene
     }
     
