@@ -12,10 +12,13 @@ import SceneKit
 import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController, SKSceneDelegate {
+class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDelegate{
 
     var motionManager: CMMotionManager?
     var scene: SCNScene!
+    
+    let wallCollision =   0b01 //1
+    let pacmanCollision = 0b10 //2
     
     var isRotating: Bool = false
     
@@ -42,11 +45,28 @@ class GameViewController: UIViewController, SKSceneDelegate {
                 if block == .wall {
                     let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
                     let node = SCNNode(geometry: box)
+                    node.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
+                    node.physicsBody?.categoryBitMask = wallCollision
+                    //node.physicsBody?.collisionBitMask = pacmanCollision
+                    node.physicsBody?.contactTestBitMask = pacmanCollision
                     node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(y * 5))
                     scene.rootNode.addChildNode(node)
                 }
             }
         }
+        
+        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+        let pacmanBox = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
+        pacmanBox.firstMaterial?.diffuse.contents = UIColor.clear
+        let boxNode = SCNNode(geometry: pacmanBox)
+        pacman.addChildNode(boxNode)
+        pacman.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: pacmanBox, options: nil))
+        pacman.physicsBody?.categoryBitMask = pacmanCollision
+        //pacman.physicsBody?.collisionBitMask = wallCollision
+        pacman.physicsBody?.contactTestBitMask = wallCollision
+        pacman.physicsBody?.isAffectedByGravity = false
+        //scene.physicsWorld.gravity = SCNVector3(x: 0, y: 0, z: 0)
+        scene.physicsWorld.contactDelegate = self
         
 //        // create and add a light to the scene
 //        let lightNode = SCNNode()
@@ -82,38 +102,40 @@ class GameViewController: UIViewController, SKSceneDelegate {
         scnView.addGestureRecognizer(tapGesture)
         
         motionManager = CMMotionManager()
-//        if (motionManager?.isAccelerometerAvailable)! {
-//            motionManager?.accelerometerUpdateInterval = 0.1
-//            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
-//                let rotate = data!.acceleration.y
-//                //print(rotate)
-//                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
-//                let direction: Float = rotate < 0 ? 1.0 : -1.0
-//                if abs(rotate) > 0.3 {
-//                    if !self.isRotating {
-//                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
-//                        pacman.runAction(action)
-//                        self.isRotating = true
-//                        
-//                        var directionVal = self.direction.rawValue + Int(direction)
-//                        if directionVal == 5 {
-//                            directionVal = 1
-//                        }
-//                        if directionVal == 0 {
-//                            directionVal = 4
-//                        }
-//                        self.direction = Player.Direction(rawValue: directionVal)!
-//                    }
-//                } else {
-//                    self.isRotating = false
-//                }
-//            })
-//        }
+        if (motionManager?.isAccelerometerAvailable)! {
+            motionManager?.accelerometerUpdateInterval = 0.1
+            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
+                let rotate = data!.acceleration.y
+                //print(rotate)
+                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+                let direction: Float = rotate < 0 ? 1.0 : -1.0
+                if abs(rotate) > 0.3 {
+                    if !self.isRotating {
+                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
+                        pacman.runAction(action, completionHandler: { 
+                            self.isContact = false
+                        })
+                        self.isRotating = true
+                        
+                        var directionVal = self.direction.rawValue + Int(direction)
+                        if directionVal == 5 {
+                            directionVal = 1
+                        }
+                        if directionVal == 0 {
+                            directionVal = 4
+                        }
+                        self.direction = Player.Direction(rawValue: directionVal)!
+                    }
+                } else {
+                    self.isRotating = false
+                }
+            })
+        }
         if (motionManager?.isDeviceMotionAvailable)! {
             motionManager?.deviceMotionUpdateInterval = 0.1
             motionManager?.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: { (data, error) in
                 if let data = data {
-                    self.handleRotation(data: data)
+                    //self.handleRotation(data: data)
 //                    if data.userAcceleration.z < -0.1 {
 //                        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
 //                        
@@ -138,7 +160,55 @@ class GameViewController: UIViewController, SKSceneDelegate {
         if abs(lastRotation - Float(data.attitude.yaw)) > 0.02 {
             pacman.eulerAngles.y = Float(data.attitude.yaw)
             lastRotation = Float(data.attitude.yaw)
-            print(pacman.eulerAngles.y)
+        }
+    }
+    
+    var isContact: Bool = false
+    
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        //print("\(contact.nodeA.name) \(contact.nodeB.name)"
+        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+        
+        print(" X: \(contact.contactPoint.x) \(pacman.position.x)")
+         print(" Z: \(contact.contactPoint.z) \(pacman.position.z)")
+        
+        print()
+        
+        if(contact.nodeA == pacman && contact.nodeB.physicsBody?.categoryBitMask == wallCollision) || (contact.nodeA.physicsBody?.categoryBitMask == wallCollision && contact.nodeB == pacman){
+            
+            func block() {
+                if let box = contact.nodeA.geometry as? SCNBox {
+                    box.firstMaterial?.diffuse.contents = UIColor.blue
+                }
+                
+                if let box = contact.nodeB.geometry as? SCNBox {
+                    box.firstMaterial?.diffuse.contents = UIColor.blue
+                }
+                print("Idiot \(contact.contactNormal)")
+                isContact = true
+            }
+            
+            print("\(contact.contactNormal)")
+            
+            if direction == .north {
+                if contact.contactNormal.x == 1.0 {
+                    block()
+                }
+            } else if direction == .east {
+                if contact.contactNormal.z == -1.0 {
+                    block()
+                }
+            } else if direction == .south {
+                if contact.contactNormal.x == -1.0 {
+                    block()
+                }
+            } else if direction == .west {
+                if contact.contactNormal.z == 1.0 {
+                    block()
+                }
+            }
+            
+            print("aua")
         }
     }
     
@@ -152,6 +222,10 @@ class GameViewController: UIViewController, SKSceneDelegate {
     }
     
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+        if isContact {
+            return
+        }
+        
         let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
         if direction == .north {
             pacman.position.x += 5
@@ -174,7 +248,7 @@ class GameViewController: UIViewController, SKSceneDelegate {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return .portrait
+            return .landscape
         } else {
             return .all
         }
