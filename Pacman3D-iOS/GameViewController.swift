@@ -82,35 +82,63 @@ class GameViewController: UIViewController, SKSceneDelegate {
         scnView.addGestureRecognizer(tapGesture)
         
         motionManager = CMMotionManager()
-        if (motionManager?.isAccelerometerAvailable)! {
-            motionManager?.accelerometerUpdateInterval = 0.1
-            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
-                let rotate = data!.acceleration.y
-                //print(rotate)
-                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
-                let direction: Float = rotate < 0 ? 1.0 : -1.0
-                if abs(rotate) > 0.3 {
-                    if !self.isRotating {
-                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
-                        pacman.runAction(action)
-                        self.isRotating = true
-                        
-                        var directionVal = self.direction.rawValue + Int(direction)
-                        if directionVal == 5 {
-                            directionVal = 1
-                        }
-                        if directionVal == 0 {
-                            directionVal = 4
-                        }
-                        self.direction = Player.Direction(rawValue: directionVal)!
-                    }
-                } else {
-                    self.isRotating = false
+//        if (motionManager?.isAccelerometerAvailable)! {
+//            motionManager?.accelerometerUpdateInterval = 0.1
+//            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
+//                let rotate = data!.acceleration.y
+//                //print(rotate)
+//                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+//                let direction: Float = rotate < 0 ? 1.0 : -1.0
+//                if abs(rotate) > 0.3 {
+//                    if !self.isRotating {
+//                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
+//                        pacman.runAction(action)
+//                        self.isRotating = true
+//                        
+//                        var directionVal = self.direction.rawValue + Int(direction)
+//                        if directionVal == 5 {
+//                            directionVal = 1
+//                        }
+//                        if directionVal == 0 {
+//                            directionVal = 4
+//                        }
+//                        self.direction = Player.Direction(rawValue: directionVal)!
+//                    }
+//                } else {
+//                    self.isRotating = false
+//                }
+//            })
+//        }
+        if (motionManager?.isDeviceMotionAvailable)! {
+            motionManager?.deviceMotionUpdateInterval = 0.1
+            motionManager?.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: { (data, error) in
+                if let data = data {
+                    self.handleRotation(data: data)
+//                    if data.userAcceleration.z < -0.1 {
+//                        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+//                        
+//                        pacman.position.x += -Float(data.userAcceleration.z) * pacman.rotation.x * 200000.0
+//                        pacman.position.z += -Float(data.userAcceleration.z) * pacman.rotation.z * 200000.0
+//                        
+//                        print(pacman.position)
+//                    }
                 }
             })
         }
+        
         if let view = self.view as? SCNView {
             view.overlaySKScene = createOverlay()
+        }
+    }
+    
+    private var lastRotation: Float = 0
+    
+    func handleRotation(data: CMDeviceMotion) {
+        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+        if abs(lastRotation - Float(data.attitude.yaw)) > 0.02 {
+            pacman.eulerAngles.y = Float(data.attitude.yaw)
+            lastRotation = Float(data.attitude.yaw)
+            print(pacman.eulerAngles.y)
         }
     }
     
@@ -146,7 +174,7 @@ class GameViewController: UIViewController, SKSceneDelegate {
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return .landscape
+            return .portrait
         } else {
             return .all
         }
