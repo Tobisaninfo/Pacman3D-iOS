@@ -43,4 +43,15 @@ class Level {
         }
         data = [[]]
     }
+    
+    func nextFreeSpace() -> (x: Int, z: Int) {
+        while true {
+            let x = Int(arc4random_uniform(UInt32(data.count)))
+            let z = Int(arc4random_uniform(UInt32(data[x].count)))
+            
+            if data[x][z] == .blank {
+                return (x, z)
+            }
+        }
+    }
 }

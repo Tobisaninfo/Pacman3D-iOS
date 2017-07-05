@@ -12,21 +12,26 @@ import SceneKit
 import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDelegate{
+class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDelegate, SCNSceneRendererDelegate {
 
     var motionManager: CMMotionManager?
     var scene: SCNScene!
     
-    let wallCollision =   0b01 //1
-    let pacmanCollision = 0b10 //2
+    static let wallCollision =     0b001 //1
+    static let pacmanCollision =   0b010 //2
+    static let monsterCollision =  0b011 //3
+    static let pointsCollision =   0b100 //4
     
     var isRotating: Bool = false
     
-    var direction: Player.Direction = .north
+    var direction: Direction = .north
     
     // overlay
     var pointsLabel: SKLabelNode!
     var lifeLabel: SKLabelNode!
+    
+    var player: Player = Player()
+    var monsters: [Monster] = []
 
     
     override func viewDidLoad() {
@@ -45,17 +50,27 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         // place the camera
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
         
-        for (y, line) in level.data.enumerated() {
-            for (x, block) in line.enumerated() {
+        for (x, line) in level.data.enumerated() {
+            for (z, block) in line.enumerated() {
                 if block == .wall {
                     let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
                     let node = SCNNode(geometry: box)
                     node.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
-                    node.physicsBody?.categoryBitMask = wallCollision
-                    //node.physicsBody?.collisionBitMask = pacmanCollision
-                    node.physicsBody?.contactTestBitMask = pacmanCollision
-                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(y * 5))
+                    node.physicsBody?.categoryBitMask = GameViewController.wallCollision
+                    node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
+                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(z * 5))
+                    node.name = "\(x) \(z)"
                     scene.rootNode.addChildNode(node)
+                } else if block == .blank {
+                    let shere = SCNSphere(radius: 0.5)
+                    shere.firstMaterial?.diffuse.contents = UIColor.blue
+                    let node = SCNNode(geometry: shere)
+                    node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+                    node.physicsBody?.categoryBitMask = GameViewController.pointsCollision
+                    node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
+                    node.name = "Point"
+                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(z * 5))
+                    self.scene.rootNode.addChildNode(node)
                 }
             }
         }
@@ -66,11 +81,9 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         let boxNode = SCNNode(geometry: pacmanBox)
         pacman.addChildNode(boxNode)
         pacman.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: pacmanBox, options: nil))
-        pacman.physicsBody?.categoryBitMask = pacmanCollision
-        //pacman.physicsBody?.collisionBitMask = wallCollision
-        pacman.physicsBody?.contactTestBitMask = wallCollision
+        pacman.physicsBody?.categoryBitMask = GameViewController.pacmanCollision
+        pacman.physicsBody?.contactTestBitMask = GameViewController.wallCollision
         pacman.physicsBody?.isAffectedByGravity = false
-        //scene.physicsWorld.gravity = SCNVector3(x: 0, y: 0, z: 0)
         scene.physicsWorld.contactDelegate = self
         
 //        // create and add a light to the scene
@@ -87,8 +100,11 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
 //        ambientLightNode.light!.color = UIColor.darkGray
 //        scene.rootNode.addChildNode(ambientLightNode)
         
+        
         // retrieve the SCNView
         let scnView = self.view as! SCNView
+        scnView.delegate = self
+        scnView.isPlaying = true
         
         // set the scene to the view
         scnView.scene = scene
@@ -129,7 +145,7 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
                         if directionVal == 0 {
                             directionVal = 4
                         }
-                        self.direction = Player.Direction(rawValue: directionVal)!
+                        self.direction = Direction(rawValue: directionVal)!
                     }
                 } else {
                     self.isRotating = false
@@ -153,6 +169,13 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
             })
         }
         
+        for _ in 1...1 {
+            let postion = level.nextFreeSpace()
+            let monster = Monster(position: SCNVector3(5 * postion.x, 1, 5 * postion.z), level: level, scene: scene)
+            monster.addToScene(rootScene: self.scene)
+            monsters.append(monster)
+        }
+        
         if let view = self.view as? SCNView {
             view.overlaySKScene = createOverlay()
         }
@@ -171,15 +194,40 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
     var isContact: Bool = false
     
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        //print("\(contact.nodeA.name) \(contact.nodeB.name)"
+        if contact.nodeA.name ?? "" == "Monster" && contact.nodeB.name ?? "" == "Monster" {
+            return
+        }
         let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
         
-        print(" X: \(contact.contactPoint.x) \(pacman.position.x)")
-         print(" Z: \(contact.contactPoint.z) \(pacman.position.z)")
+        if contact.nodeA.name ?? "" == "Monster" && contact.nodeB.name ?? "" == "Pacman" ||
+            contact.nodeB.name ?? "" == "Monster" && contact.nodeA.name ?? "" == "Pacman" {
+            player.life = player.life - 1
+            if player.life >= 0 {
+                lifeLabel.text = String(repeating: "♥️", count: player.life)
+            }
+            
+            pacman.position = SCNVector3(5, 2, 5)
+            // TODO Restart
+            
+            if player.life == 0 {
+                //exit(0) // TODO Game Menu
+            }
+        }
         
-        print()
+        if contact.nodeA.name ?? "" == "Point" && contact.nodeB.name ?? "" == "Pacman" ||
+            contact.nodeB.name ?? "" == "Point" && contact.nodeA.name ?? "" == "Pacman" {
+            player.points = player.points + 10
+            
+            pacman.position = SCNVector3(5, 2, 5)
+            pointsLabel.text = "\(player.points) Punkte"
+            if contact.nodeA.name ?? "" == "Point" {
+                contact.nodeA.removeFromParentNode()
+            } else if contact.nodeB.name ?? "" == "Point" {
+                contact.nodeB.removeFromParentNode()
+            }
+        }
         
-        if(contact.nodeA == pacman && contact.nodeB.physicsBody?.categoryBitMask == wallCollision) || (contact.nodeA.physicsBody?.categoryBitMask == wallCollision && contact.nodeB == pacman){
+        if(contact.nodeA == pacman && contact.nodeB.physicsBody?.categoryBitMask == GameViewController.wallCollision) || (contact.nodeA.physicsBody?.categoryBitMask == GameViewController.wallCollision && contact.nodeB == pacman){
             
             func block() {
                 if let box = contact.nodeA.geometry as? SCNBox {
@@ -189,11 +237,8 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
                 if let box = contact.nodeB.geometry as? SCNBox {
                     box.firstMaterial?.diffuse.contents = UIColor.blue
                 }
-                print("Idiot \(contact.contactNormal)")
                 isContact = true
             }
-            
-            print("\(contact.contactNormal)")
             
             if direction == .north {
                 if contact.contactNormal.x == 1.0 {
@@ -212,8 +257,12 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
                     block()
                 }
             }
-            
-            print("aua")
+        }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        for monster in monsters {
+            monster.move()
         }
     }
     
@@ -227,13 +276,12 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         
         lifeLabel = SKLabelNode(fontNamed: "Chalkduster")
         lifeLabel.text = "♥️♥️♥️"
-        lifeLabel.horizontalAlignmentMode = .right
         lifeLabel.fontColor = UIColor.red
         lifeLabel.position = CGPoint(x: self.view.frame.height - 50, y: 5)
         scene.addChild(lifeLabel)
         return scene
     }
-    
+
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
         if isContact {
             return

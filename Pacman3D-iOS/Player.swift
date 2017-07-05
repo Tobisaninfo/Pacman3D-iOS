@@ -9,12 +9,6 @@
 import Foundation
 
 class Player {
-    enum Direction: Int {
-        case north = 1
-        case east
-        case south
-        case west
-    }
     
     var points: Int = 0
     var life: Int = 3
