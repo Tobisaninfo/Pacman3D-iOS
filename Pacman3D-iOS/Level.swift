@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SceneKit
 
 class Level {
     
@@ -42,6 +43,41 @@ class Level {
             }
         }
         data = [[]]
+    }
+    
+    func createLevelEnviroment(scene: SCNScene) {
+        for (x, line) in data.enumerated() {
+            for (z, block) in line.enumerated() {
+                if block == .wall {
+                    addBlock(toScene: scene, at: (x, z))
+                } else if block == .blank {
+                    //addPointObject(toScene: scene, at: (x, z))
+                }
+            }
+        }
+    }
+    
+    private func addBlock(toScene scene: SCNScene, at point: (x: Int, z: Int)) {
+        let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
+        let node = SCNNode(geometry: box)
+        node.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
+        node.physicsBody?.categoryBitMask = GameViewController.wallCollision
+        node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
+        node.position = SCNVector3(x: Float(point.x * 5), y: 1, z: Float(point.z * 5))
+        node.name = "\(point.x) \(point.z)"
+        scene.rootNode.addChildNode(node)
+    }
+    
+    private func addPointObject(toScene scene: SCNScene, at point: (x: Int, z: Int)) {
+        let shere = SCNSphere(radius: 0.5)
+        shere.firstMaterial?.diffuse.contents = UIColor.blue
+        let node = SCNNode(geometry: shere)
+        node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        node.physicsBody?.categoryBitMask = GameViewController.pointsCollision
+        node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
+        node.name = "Point"
+        node.position = SCNVector3(x: Float(point.x * 5), y: 1, z:Float(point.z * 5))
+        scene.rootNode.addChildNode(node)
     }
     
     func nextFreeSpace() -> (x: Int, z: Int) {

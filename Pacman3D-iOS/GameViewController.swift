@@ -12,7 +12,7 @@ import SceneKit
 import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDelegate, SCNSceneRendererDelegate {
+class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDelegate, SCNSceneRendererDelegate {
 
     var motionManager: CMMotionManager?
     var scene: SCNScene!
@@ -22,17 +22,19 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
     static let monsterCollision =  0b011 //3
     static let pointsCollision =   0b100 //4
     
-    var isRotating: Bool = false
+    // MARK: - Overlay
     
-    var direction: Direction = .north
-    
-    // overlay
     var pointsLabel: SKLabelNode!
     var lifeLabel: SKLabelNode!
     
-    var player: Player = Player()
+    // MARK: - Game Objects
+    
+    var player: Player!
     var monsters: [Monster] = []
 
+    // MARK: - Input Handler
+    private var touchInputHandler: TouchInputHandler!
+    private var motionInput: MotionInput?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +44,9 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         // create a new scene
         scene = SCNScene(named: "art.scnassets/ship.scn")!
         
+        let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
+        player = Player(node: pacman, scene: scene, level: level)
+        
         // create and add a camera to the scene
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
@@ -50,41 +55,9 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         // place the camera
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
         
-        for (x, line) in level.data.enumerated() {
-            for (z, block) in line.enumerated() {
-                if block == .wall {
-                    let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
-                    let node = SCNNode(geometry: box)
-                    node.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: box, options: nil))
-                    node.physicsBody?.categoryBitMask = GameViewController.wallCollision
-                    node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
-                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(z * 5))
-                    node.name = "\(x) \(z)"
-                    scene.rootNode.addChildNode(node)
-                } else if block == .blank {
-                    let shere = SCNSphere(radius: 0.5)
-                    shere.firstMaterial?.diffuse.contents = UIColor.blue
-                    let node = SCNNode(geometry: shere)
-                    node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-                    node.physicsBody?.categoryBitMask = GameViewController.pointsCollision
-                    node.physicsBody?.contactTestBitMask = GameViewController.pacmanCollision
-                    node.name = "Point"
-                    node.position = SCNVector3(x: Float(x * 5), y: 1, z:Float(z * 5))
-                    self.scene.rootNode.addChildNode(node)
-                }
-            }
-        }
-        
-        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
-        let pacmanBox = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
-        pacmanBox.firstMaterial?.diffuse.contents = UIColor.clear
-        let boxNode = SCNNode(geometry: pacmanBox)
-        pacman.addChildNode(boxNode)
-        pacman.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: pacmanBox, options: nil))
-        pacman.physicsBody?.categoryBitMask = GameViewController.pacmanCollision
-        pacman.physicsBody?.contactTestBitMask = GameViewController.wallCollision
-        pacman.physicsBody?.isAffectedByGravity = false
         scene.physicsWorld.contactDelegate = self
+        
+        level.createLevelEnviroment(scene: scene)
         
 //        // create and add a light to the scene
 //        let lightNode = SCNNode()
@@ -119,38 +92,14 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
         scnView.backgroundColor = UIColor.black
         
         // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
+        touchInputHandler = TouchInputHandler(target: self, action: #selector(handleTap(_:)))
+        scnView.addGestureRecognizer(touchInputHandler)
         
+        self.motionInput = MotionInput(gameScene: self)
         motionManager = CMMotionManager()
         if (motionManager?.isAccelerometerAvailable)! {
             motionManager?.accelerometerUpdateInterval = 0.1
-            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
-                let rotate = data!.acceleration.y
-                //print(rotate)
-                let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
-                let direction: Float = rotate < 0 ? 1.0 : -1.0
-                if abs(rotate) > 0.3 {
-                    if !self.isRotating {
-                        let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
-                        pacman.runAction(action, completionHandler: { 
-                            self.isContact = false
-                        })
-                        self.isRotating = true
-                        
-                        var directionVal = self.direction.rawValue + Int(direction)
-                        if directionVal == 5 {
-                            directionVal = 1
-                        }
-                        if directionVal == 0 {
-                            directionVal = 4
-                        }
-                        self.direction = Direction(rawValue: directionVal)!
-                    }
-                } else {
-                    self.isRotating = false
-                }
-            })
+            motionManager?.startAccelerometerUpdates(to: OperationQueue.main, withHandler: motionInput!.handleMotionInput)
         }
         if (motionManager?.isDeviceMotionAvailable)! {
             motionManager?.deviceMotionUpdateInterval = 0.1
@@ -169,7 +118,7 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
             })
         }
         
-        for _ in 1...1 {
+        for _ in 1...10 {
             let postion = level.nextFreeSpace()
             let monster = Monster(position: SCNVector3(5 * postion.x, 1, 5 * postion.z), level: level, scene: scene)
             monster.addToScene(rootScene: self.scene)
@@ -190,8 +139,6 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
             lastRotation = Float(data.attitude.yaw)
         }
     }
-    
-    var isContact: Bool = false
     
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         if contact.nodeA.name ?? "" == "Monster" && contact.nodeB.name ?? "" == "Monster" {
@@ -226,43 +173,21 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
                 contact.nodeB.removeFromParentNode()
             }
         }
-        
-        if(contact.nodeA == pacman && contact.nodeB.physicsBody?.categoryBitMask == GameViewController.wallCollision) || (contact.nodeA.physicsBody?.categoryBitMask == GameViewController.wallCollision && contact.nodeB == pacman){
-            
-            func block() {
-                if let box = contact.nodeA.geometry as? SCNBox {
-                    box.firstMaterial?.diffuse.contents = UIColor.blue
-                }
-                
-                if let box = contact.nodeB.geometry as? SCNBox {
-                    box.firstMaterial?.diffuse.contents = UIColor.blue
-                }
-                isContact = true
-            }
-            
-            if direction == .north {
-                if contact.contactNormal.x == 1.0 {
-                    block()
-                }
-            } else if direction == .east {
-                if contact.contactNormal.z == -1.0 {
-                    block()
-                }
-            } else if direction == .south {
-                if contact.contactNormal.x == -1.0 {
-                    block()
-                }
-            } else if direction == .west {
-                if contact.contactNormal.z == 1.0 {
-                    block()
-                }
-            }
-        }
     }
+    
+    private var lastTime: TimeInterval = 0
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         for monster in monsters {
             monster.move()
+        }
+        
+        
+        if time - lastTime > 0.25 {
+            if touchInputHandler.isTouchDown {
+                player.move()
+            }
+            lastTime = time
         }
     }
     
@@ -283,20 +208,6 @@ class GameViewController: UIViewController, SKSceneDelegate ,SCNPhysicsContactDe
     }
 
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        if isContact {
-            return
-        }
-        
-        let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
-        if direction == .north {
-            pacman.position.x += 5
-        } else if direction == .east {
-            pacman.position.z -= 5
-        } else if direction == .south {
-            pacman.position.x -= 5
-        } else if direction == .west {
-            pacman.position.z += 5
-        }
     }
     
     override var shouldAutorotate: Bool {
