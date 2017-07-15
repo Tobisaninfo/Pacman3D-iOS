@@ -12,7 +12,7 @@ import SceneKit
 import SpriteKit
 import CoreMotion
 
-class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDelegate, SCNSceneRendererDelegate {
+class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDelegate, SCNSceneRendererDelegate, PlayerDelegate {
 
     var motionManager: CMMotionManager?
     var scene: SCNScene!
@@ -46,6 +46,7 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         
         let pacman = scene.rootNode.childNode(withName: "Pacman", recursively: true)!
         player = Player(node: pacman, scene: scene, level: level)
+        player.delegate = self
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -160,18 +161,15 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
                 //exit(0) // TODO Game Menu
             }
         }
-        
-        if contact.nodeA.name ?? "" == "Point" && contact.nodeB.name ?? "" == "Pacman" ||
-            contact.nodeB.name ?? "" == "Point" && contact.nodeA.name ?? "" == "Pacman" {
-            player.points = player.points + 10
-            
-            pacman.position = SCNVector3(5, 2, 5)
-            pointsLabel.text = "\(player.points) Punkte"
-            if contact.nodeA.name ?? "" == "Point" {
-                contact.nodeA.removeFromParentNode()
-            } else if contact.nodeB.name ?? "" == "Point" {
-                contact.nodeB.removeFromParentNode()
-            }
+    }
+    
+    func player(_ player: Player, scoreDidUpdate score: Int) {
+        pointsLabel.text = "\(player.points) Punkte"
+    }
+    
+    func player(_ player: Player, didCollectScoreAt position: (x: Int, z: Int)) {
+        if let node = scene.rootNode.childNode(withName: "Score.\(position.x).\(position.z)", recursively: true) {
+            node.removeFromParentNode()
         }
     }
     

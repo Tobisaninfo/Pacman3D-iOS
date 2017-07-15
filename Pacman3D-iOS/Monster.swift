@@ -87,16 +87,16 @@ class Monster {
         
         lastRotationPoint = (x, z)
         
-        if level.data[x - 1][z] == .blank {
+        if level.data[x - 1][z] != .wall {
             directions.append(.south)
         }
-        if level.data[x][z - 1] == .blank {
+        if level.data[x][z - 1] != .wall {
             directions.append(.west)
         }
-        if level.data[x + 1][z] == .blank {
+        if level.data[x + 1][z] != .wall {
             directions.append(.north)
         }
-        if level.data[x][z + 1] == .blank {
+        if level.data[x][z + 1] != .wall {
             directions.append(.east)
         }
         

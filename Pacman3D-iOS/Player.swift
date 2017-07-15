@@ -9,7 +9,14 @@
 import Foundation
 import SceneKit
 
+protocol PlayerDelegate {
+    func player(_ player: Player, scoreDidUpdate score: Int)
+    func player(_ player: Player, didCollectScoreAt position: (x: Int, z: Int))
+}
+
 class Player {
+    
+    var delegate: PlayerDelegate?
     
     var points: Int = 0
     var life: Int = 3
@@ -37,9 +44,18 @@ class Player {
     }
     
     func move() {
-        print("\(direction)\t\(findFreeSpaces())")
-        if !findFreeSpaces().contains(direction) {
+        let freeSpaces = findFreeSpaces()
+        if !freeSpaces.contains(direction) {
             return
+        }
+        
+        let x: Int = Int(position.x / 5)
+        let z: Int = Int(position.z / 5)
+        
+        if level.collectPoint(position: (x, z)) {
+            points = points + 10
+            delegate?.player(self, didCollectScoreAt: (x, z))
+            delegate?.player(self, scoreDidUpdate: points)
         }
         
         if direction == .north {
@@ -63,16 +79,16 @@ class Player {
         
         print("\(x) \(z)")
         
-        if level.data[x - 1][z] == .blank {
+        if level.data[x - 1][z] != .wall {
             directions.append(.south)
         }
-        if level.data[x][z - 1] == .blank {
+        if level.data[x][z - 1] != .wall {
             directions.append(.west)
         }
-        if level.data[x + 1][z] == .blank {
+        if level.data[x + 1][z] != .wall {
             directions.append(.north)
         }
-        if level.data[x][z + 1] == .blank {
+        if level.data[x][z + 1] != .wall {
             directions.append(.east)
         }
         
