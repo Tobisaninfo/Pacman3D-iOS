@@ -76,9 +76,7 @@ class Player {
         
         let x: Int = Int(position.x / 5)
         let z: Int = Int(position.z / 5)
-        
-        print("\(x) \(z)")
-        
+                
         if level.data[x - 1][z] != .wall {
             directions.append(.south)
         }

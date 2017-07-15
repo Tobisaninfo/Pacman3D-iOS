@@ -67,12 +67,14 @@ class Level {
         return false
     }
     
-    private func addBlock(toScene scene: SCNScene, at point: (x: Int, z: Int)) {
-        let box = SCNBox(width: 5, height: 2, length: 5, chamferRadius: 0)
-        let node = SCNNode(geometry: box)
-        node.position = SCNVector3(x: Float(point.x * 5), y: 1, z: Float(point.z * 5))
-        node.name = "\(point.x) \(point.z)"
-        scene.rootNode.addChildNode(node)
+    private func addBlock(toScene rootScene: SCNScene, at point: (x: Int, z: Int)) {
+        let scene = SCNScene(named: "art.scnassets/Wall.dae")
+        if let node = scene?.rootNode.childNodes.first {
+            node.scale = SCNVector3(x: 2.5, y: 1, z: 2.5)
+            node.position = SCNVector3(x: Float(point.x * 5), y: 1, z: Float(point.z * 5))
+            node.name = "\(point.x) \(point.z)"
+            rootScene.rootNode.addChildNode(node)
+        }
     }
     
     private func addPointObject(toScene scene: SCNScene, at point: (x: Int, z: Int)) {

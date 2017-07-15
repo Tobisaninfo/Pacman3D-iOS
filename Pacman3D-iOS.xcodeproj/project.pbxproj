@@ -17,12 +17,15 @@
 		F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */; };
 		F6BEB81E1EF7F99B00EDAA66 /* Pacman3D_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB81D1EF7F99B00EDAA66 /* Pacman3D_iOSTests.swift */; };
 		F6BEB8291EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB8281EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift */; };
+		F6E39CE21F1A56E500A3E7D1 /* wall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F6E39CE11F1A56E500A3E7D1 /* wall.jpg */; };
+		F6E39CE41F1A583B00A3E7D1 /* floor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F6E39CE31F1A583B00A3E7D1 /* floor.jpg */; };
+		F6E39CEA1F1A7C2C00A3E7D1 /* background.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F6E39CE91F1A7C2C00A3E7D1 /* background.jpg */; };
+		F6E39CEC1F1A7D5500A3E7D1 /* BorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E39CEB1F1A7D5500A3E7D1 /* BorderButton.swift */; };
 		F6E4AE431F0CEC6C004BFDBF /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E4AE421F0CEC6C004BFDBF /* Monster.swift */; };
 		F6E4AE451F0CF1DF004BFDBF /* Direction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E4AE441F0CF1DF004BFDBF /* Direction.swift */; };
 		F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7151EF80AD500C1DE35 /* Level.swift */; };
 		F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */; };
 		F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */ = {isa = PBXBuildFile; fileRef = F6FEE71A1EF8135200C1DE35 /* level.plv */; };
-		F6FEE71F1EF8379600C1DE35 /* run.png in Resources */ = {isa = PBXBuildFile; fileRef = F6FEE71E1EF8379600C1DE35 /* run.png */; };
 		F6FEE7231EF83DAF00C1DE35 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6FEE7221EF83DAF00C1DE35 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,12 +63,15 @@
 		F6BEB8241EF7F99C00EDAA66 /* Pacman3D-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pacman3D-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6BEB8281EF7F99C00EDAA66 /* Pacman3D_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pacman3D_iOSUITests.swift; sourceTree = "<group>"; };
 		F6BEB82A1EF7F99C00EDAA66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F6E39CE11F1A56E500A3E7D1 /* wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall.jpg; sourceTree = "<group>"; };
+		F6E39CE31F1A583B00A3E7D1 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
+		F6E39CE91F1A7C2C00A3E7D1 /* background.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background.jpg; sourceTree = "<group>"; };
+		F6E39CEB1F1A7D5500A3E7D1 /* BorderButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderButton.swift; sourceTree = "<group>"; };
 		F6E4AE421F0CEC6C004BFDBF /* Monster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 		F6E4AE441F0CF1DF004BFDBF /* Direction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		F6FEE7151EF80AD500C1DE35 /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		F6FEE7171EF80C1500C1DE35 /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
 		F6FEE71A1EF8135200C1DE35 /* level.plv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level.plv; sourceTree = "<group>"; };
-		F6FEE71E1EF8379600C1DE35 /* run.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run.png; sourceTree = "<group>"; };
 		F6FEE7221EF83DAF00C1DE35 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -123,13 +129,16 @@
 				F6BEB80A1EF7F99B00EDAA66 /* GameViewController.swift */,
 				F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */,
 				F6621DF51F12B82200F9E486 /* MotionInput.swift */,
+				F6E39CEB1F1A7D5500A3E7D1 /* BorderButton.swift */,
 				F6BEB8081EF7F99B00EDAA66 /* art.scnassets */,
 				F6BEB80F1EF7F99B00EDAA66 /* Assets.xcassets */,
 				F6BEB80C1EF7F99B00EDAA66 /* Main.storyboard */,
 				F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */,
 				F6BEB8141EF7F99B00EDAA66 /* Info.plist */,
 				F6FEE71A1EF8135200C1DE35 /* level.plv */,
-				F6FEE71E1EF8379600C1DE35 /* run.png */,
+				F6E39CE11F1A56E500A3E7D1 /* wall.jpg */,
+				F6E39CE31F1A583B00A3E7D1 /* floor.jpg */,
+				F6E39CE91F1A7C2C00A3E7D1 /* background.jpg */,
 			);
 			path = "Pacman3D-iOS";
 			sourceTree = "<group>";
@@ -282,11 +291,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6BEB8091EF7F99B00EDAA66 /* art.scnassets in Resources */,
-				F6FEE71F1EF8379600C1DE35 /* run.png in Resources */,
+				F6E39CE41F1A583B00A3E7D1 /* floor.jpg in Resources */,
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
 				F6BEB80E1EF7F99B00EDAA66 /* Main.storyboard in Resources */,
 				F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */,
+				F6E39CEA1F1A7C2C00A3E7D1 /* background.jpg in Resources */,
+				F6E39CE21F1A56E500A3E7D1 /* wall.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +325,7 @@
 				F6621DF61F12B82200F9E486 /* MotionInput.swift in Sources */,
 				F6E4AE451F0CF1DF004BFDBF /* Direction.swift in Sources */,
 				F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */,
+				F6E39CEC1F1A7D5500A3E7D1 /* BorderButton.swift in Sources */,
 				F6FEE7161EF80AD500C1DE35 /* Level.swift in Sources */,
 				F6621DF41F12B09800F9E486 /* TouchInputHandler.swift in Sources */,
 				F6BEB80B1EF7F99B00EDAA66 /* GameViewController.swift in Sources */,

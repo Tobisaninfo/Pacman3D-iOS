@@ -1,20 +1,71 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="uj1-yy-esL">
+    <device id="retina4_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--View Controller-->
+        <scene sceneID="p6t-FQ-akW">
+            <objects>
+                <viewController id="uj1-yy-esL" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YLp-lV-ETO"/>
+                        <viewControllerLayoutGuide type="bottom" id="h1R-Z6-Vqf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TCv-Se-adc">
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="zYz-H3-5Ds">
+                                <rect key="frame" x="0.0" y="0.0" width="666" height="375"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAb-CX-EkL" customClass="BorderButton" customModule="Pacman3D_iOS" customModuleProvider="target">
+                                <rect key="frame" x="233" y="240" width="200" height="42"/>
+                                <color key="backgroundColor" red="0.96470588235294119" green="1" blue="0.14195293351715688" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="BvE-zD-mzc"/>
+                                    <constraint firstAttribute="height" constant="42" id="oKh-NP-I52"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Start">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="BV1-FR-VrT" kind="presentation" modalTransitionStyle="flipHorizontal" id="Eun-P3-is3"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="RAb-CX-EkL" firstAttribute="centerY" secondItem="TCv-Se-adc" secondAttribute="centerY" constant="73.5" id="2S4-Xb-Hwe"/>
+                            <constraint firstItem="zYz-H3-5Ds" firstAttribute="leading" secondItem="TCv-Se-adc" secondAttribute="leading" id="4GM-1v-0v2"/>
+                            <constraint firstItem="RAb-CX-EkL" firstAttribute="centerX" secondItem="TCv-Se-adc" secondAttribute="centerX" id="Oej-f7-YP9"/>
+                            <constraint firstItem="zYz-H3-5Ds" firstAttribute="centerX" secondItem="RAb-CX-EkL" secondAttribute="centerX" id="cHc-Is-wG5"/>
+                            <constraint firstItem="zYz-H3-5Ds" firstAttribute="bottom" secondItem="h1R-Z6-Vqf" secondAttribute="top" id="foo-ju-cTx"/>
+                            <constraint firstItem="zYz-H3-5Ds" firstAttribute="centerY" secondItem="RAb-CX-EkL" secondAttribute="centerY" constant="-73.5" id="san-mB-ZVk"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4f0-XF-f7U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-780.35982008995506" y="55.200000000000003"/>
+        </scene>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Cei-gA-s71"/>
-                        <viewControllerLayoutGuide type="bottom" id="O1X-57-Ctf"/>
-                    </layoutGuides>
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Pacman3D_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <sceneKitView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </sceneKitView>
@@ -23,4 +74,7 @@
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="background.jpg" width="799" height="449"/>
+    </resources>
 </document>

@@ -26,8 +26,13 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     
     var pointsLabel: SKLabelNode!
     var lifeLabel: SKLabelNode!
+    var backButton: SKSpriteNode!
+    
+    var restartButton: SKLabelNode!
     
     // MARK: - Game Objects
+    
+    let monsterCount = 6
     
     var player: Player!
     var monsters: [Monster] = []
@@ -60,21 +65,6 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         
         level.createLevelEnviroment(scene: scene)
         
-//        // create and add a light to the scene
-//        let lightNode = SCNNode()
-//        lightNode.light = SCNLight()
-//        lightNode.light!.type = .omni
-//        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-//        scene.rootNode.addChildNode(lightNode)
-//        
-//        // create and add an ambient light to the scene
-//        let ambientLightNode = SCNNode()
-//        ambientLightNode.light = SCNLight()
-//        ambientLightNode.light!.type = .ambient
-//        ambientLightNode.light!.color = UIColor.darkGray
-//        scene.rootNode.addChildNode(ambientLightNode)
-        
-        
         // retrieve the SCNView
         let scnView = self.view as! SCNView
         scnView.delegate = self
@@ -92,8 +82,15 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         // configure the view
         scnView.backgroundColor = UIColor.black
         
+        // Create overlay
+        if let view = self.view as? SCNView {
+            view.overlaySKScene = createOverlay()
+        }
+        
         // add a tap gesture recognizer
         touchInputHandler = TouchInputHandler(target: self, action: #selector(handleTap(_:)))
+        touchInputHandler.scene = (self.view as? SCNView)?.overlaySKScene
+        touchInputHandler.gameController = self
         scnView.addGestureRecognizer(touchInputHandler)
         
         self.motionInput = MotionInput(gameScene: self)
@@ -119,15 +116,11 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
             })
         }
         
-        for _ in 1...10 {
+        for _ in 1...monsterCount {
             let postion = level.nextFreeSpace()
             let monster = Monster(position: SCNVector3(5 * postion.x, 1, 5 * postion.z), level: level, scene: scene)
             monster.addToScene(rootScene: self.scene)
             monsters.append(monster)
-        }
-        
-        if let view = self.view as? SCNView {
-            view.overlaySKScene = createOverlay()
         }
     }
     
@@ -154,11 +147,12 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
                 lifeLabel.text = String(repeating: "♥️", count: player.life)
             }
             
-            pacman.position = SCNVector3(5, 2, 5)
-            // TODO Restart
+            let monster = contact.nodeA.name ?? "" == "Monster" ? contact.nodeA : contact.nodeB
+            monster.removeFromParentNode()
             
-            if player.life == 0 {
-                //exit(0) // TODO Game Menu
+            if player.life <= 0 {
+                self.scene.isPaused = true
+                restartButton.isHidden = false
             }
         }
     }
@@ -176,34 +170,57 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     private var lastTime: TimeInterval = 0
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        for monster in monsters {
-            monster.move()
-        }
-        
-        
-        if time - lastTime > 0.25 {
-            if touchInputHandler.isTouchDown {
-                player.move()
+        if !scene.isPaused {
+            for monster in monsters {
+                monster.move()
             }
-            lastTime = time
+            
+            if time - lastTime > 0.25 {
+                if touchInputHandler.isTouchDown {
+                    player.move()
+                }
+                lastTime = time
+            }
         }
     }
     
     func createOverlay() -> SKScene {
-        let scene = SKScene(size: CGSize(width: self.view.frame.size.height, height: self.view.frame.size.width))
+        let scene = SKScene(size: CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height))
         pointsLabel = SKLabelNode(fontNamed: "Chalkduster")
         pointsLabel.text = "0 Punkte"
+        pointsLabel.fontSize = 20
         pointsLabel.fontColor = UIColor.red
-        pointsLabel.position = CGPoint(x: 100, y: self.view.frame.width - 30)
+        pointsLabel.position = CGPoint(x: 100, y: self.view.frame.height - 30)
         scene.addChild(pointsLabel)
         
         lifeLabel = SKLabelNode(fontNamed: "Chalkduster")
         lifeLabel.text = "♥️♥️♥️"
         lifeLabel.fontColor = UIColor.red
-        lifeLabel.position = CGPoint(x: self.view.frame.height - 50, y: 5)
+        lifeLabel.position = CGPoint(x: self.view.frame.width - 50, y: 5)
         scene.addChild(lifeLabel)
+        
+        backButton = SKSpriteNode(color: UIColor.purple, size: CGSize(width: 40, height: 40))
+        backButton.position = CGPoint(x: backButton.size.width / 2, y: backButton.size.height / 2)
+        backButton.name = "Back"
+        scene.addChild(backButton)
+        
+        restartButton = SKLabelNode(fontNamed: "Chalkduster")
+        restartButton.text = "Restart"
+        restartButton.fontSize = 40
+        restartButton.fontColor = UIColor.red
+        restartButton.position = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 2)
+        restartButton.isHidden = true
+        restartButton.name = "Restart"
+        scene.addChild(restartButton)
+        
         return scene
     }
+    
+    
+    func restart() {
+        viewDidLoad()
+    }
+    
 
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
     }
@@ -218,7 +235,7 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            return .landscape
+            return .landscapeLeft
         } else {
             return .all
         }
