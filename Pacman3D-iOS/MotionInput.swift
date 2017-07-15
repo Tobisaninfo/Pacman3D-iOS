@@ -26,7 +26,7 @@ class MotionInput {
         let direction: Float = rotate < 0 ? 1.0 : -1.0
         if abs(rotate) > 0.3 {
             if !self.isRotating {
-                let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.25)
+                let action = SCNAction.rotateBy(x: 0, y: CGFloat(direction * Float.pi * 0.5), z: 0, duration: 0.15)
                 pacman.runAction(action, completionHandler: nil)
                 self.isRotating = true
                 

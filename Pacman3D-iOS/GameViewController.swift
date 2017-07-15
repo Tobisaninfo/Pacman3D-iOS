@@ -28,14 +28,17 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     var lifeLabel: SKLabelNode!
     var backButton: SKSpriteNode!
     
+    var minimap: [[SKSpriteNode]] = []
+    
     var restartButton: SKLabelNode!
     
     // MARK: - Game Objects
     
     let monsterCount = 6
     
+    var level: Level!
     var player: Player!
-    var monsters: [Monster] = []
+    var monsters: [Monster]!
 
     // MARK: - Input Handler
     private var touchInputHandler: TouchInputHandler!
@@ -44,7 +47,9 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let level = Level(named: "level")
+        monsters = []
+        
+        level = Level(named: "level")
         
         // create a new scene
         scene = SCNScene(named: "art.scnassets/ship.scn")!
@@ -88,6 +93,10 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         }
         
         // add a tap gesture recognizer
+        if touchInputHandler != nil {
+            scnView.removeGestureRecognizer(touchInputHandler)
+        }
+        
         touchInputHandler = TouchInputHandler(target: self, action: #selector(handleTap(_:)))
         touchInputHandler.scene = (self.view as? SCNView)?.overlaySKScene
         touchInputHandler.gameController = self
@@ -138,7 +147,6 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         if contact.nodeA.name ?? "" == "Monster" && contact.nodeB.name ?? "" == "Monster" {
             return
         }
-        let pacman = self.scene.rootNode.childNode(withName: "Pacman", recursively: true)!
         
         if contact.nodeA.name ?? "" == "Monster" && contact.nodeB.name ?? "" == "Pacman" ||
             contact.nodeB.name ?? "" == "Monster" && contact.nodeA.name ?? "" == "Pacman" {
@@ -149,6 +157,15 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
             
             let monster = contact.nodeA.name ?? "" == "Monster" ? contact.nodeA : contact.nodeB
             monster.removeFromParentNode()
+            
+            for m in monsters {
+                if let n =  m.node {
+                    if n == monster {
+                        monsters.remove(object: m)
+                        break
+                    }
+                }
+            }
             
             if player.life <= 0 {
                 self.scene.isPaused = true
@@ -181,6 +198,8 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
                 }
                 lastTime = time
             }
+            
+            updateMinimap()
         }
     }
     
@@ -199,7 +218,8 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         lifeLabel.position = CGPoint(x: self.view.frame.width - 50, y: 5)
         scene.addChild(lifeLabel)
         
-        backButton = SKSpriteNode(color: UIColor.purple, size: CGSize(width: 40, height: 40))
+        backButton = SKSpriteNode(imageNamed: "pause.png")
+        backButton.size = CGSize(width: 60, height: 60)
         backButton.position = CGPoint(x: backButton.size.width / 2, y: backButton.size.height / 2)
         backButton.name = "Back"
         scene.addChild(backButton)
@@ -213,9 +233,50 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
         restartButton.name = "Restart"
         scene.addChild(restartButton)
         
+        let frame = self.view.frame
+        
+        minimap = []
+        for (x, _) in level.data.enumerated() {
+            var nodes: [SKSpriteNode] = []
+            for (z, _) in level.data[x].enumerated() {
+                let node = SKSpriteNode(color: UIColor.magenta, size: CGSize(width: 5, height: 5))
+                let posX = frame.width - CGFloat(level.data[x].count * 5) + CGFloat(z * 5) + 2.5
+                let posZ = frame.height - CGFloat(level.data.count * 5) + CGFloat(x * 5) + 2.5
+                node.position = CGPoint(x: posX, y: posZ)
+                nodes.append(node)
+                scene.addChild(node)
+            }
+            minimap.append(nodes)
+        }
+        
         return scene
     }
     
+    func updateMinimap() {
+        for (x, _) in level.data.enumerated() {
+            for (z, data) in level.data[x].enumerated() {
+                let node = minimap[x][z]
+                switch data {
+                case .blank:
+                    node.color = UIColor.black.withAlphaComponent(0.6)
+                case .point:
+                    node.color = UIColor.blue.withAlphaComponent(0.6)
+                case .wall:
+                    node.color = UIColor.gray.withAlphaComponent(0.6)
+                }
+            }
+        }
+
+        for monster in monsters {
+            let x: Int = Int(monster.position.x / 5)
+            let z: Int = Int(monster.position.z / 5)
+            minimap[x][z].color = UIColor.red.withAlphaComponent(0.6)
+        }
+        
+        let x: Int = Int(player.position.x / 5)
+        let z: Int = Int(player.position.z / 5)
+        minimap[x][z].color = UIColor.yellow.withAlphaComponent(0.6)
+    }
     
     func restart() {
         viewDidLoad()

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F6090F531F1AA9270003F688 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = F6090F521F1AA9270003F688 /* pause.png */; };
 		F6621DF41F12B09800F9E486 /* TouchInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */; };
 		F6621DF61F12B82200F9E486 /* MotionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF51F12B82200F9E486 /* MotionInput.swift */; };
 		F6BEB8071EF7F99B00EDAA66 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB8061EF7F99B00EDAA66 /* AppDelegate.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F6090F521F1AA9270003F688 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInputHandler.swift; sourceTree = "<group>"; };
 		F6621DF51F12B82200F9E486 /* MotionInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionInput.swift; sourceTree = "<group>"; };
 		F6BEB8031EF7F99B00EDAA66 /* Pacman3D-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pacman3D-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +102,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F6090F541F1AA92D0003F688 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F6FEE71A1EF8135200C1DE35 /* level.plv */,
+				F6E39CE11F1A56E500A3E7D1 /* wall.jpg */,
+				F6E39CE31F1A583B00A3E7D1 /* floor.jpg */,
+				F6090F521F1AA9270003F688 /* pause.png */,
+				F6E39CE91F1A7C2C00A3E7D1 /* background.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		F6BEB7FA1EF7F99B00EDAA66 = {
 			isa = PBXGroup;
 			children = (
@@ -135,10 +149,7 @@
 				F6BEB80C1EF7F99B00EDAA66 /* Main.storyboard */,
 				F6BEB8111EF7F99B00EDAA66 /* LaunchScreen.storyboard */,
 				F6BEB8141EF7F99B00EDAA66 /* Info.plist */,
-				F6FEE71A1EF8135200C1DE35 /* level.plv */,
-				F6E39CE11F1A56E500A3E7D1 /* wall.jpg */,
-				F6E39CE31F1A583B00A3E7D1 /* floor.jpg */,
-				F6E39CE91F1A7C2C00A3E7D1 /* background.jpg */,
+				F6090F541F1AA92D0003F688 /* Resources */,
 			);
 			path = "Pacman3D-iOS";
 			sourceTree = "<group>";
@@ -295,6 +306,7 @@
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
 				F6BEB80E1EF7F99B00EDAA66 /* Main.storyboard in Resources */,
+				F6090F531F1AA9270003F688 /* pause.png in Resources */,
 				F6FEE71B1EF8135200C1DE35 /* level.plv in Resources */,
 				F6E39CEA1F1A7C2C00A3E7D1 /* background.jpg in Resources */,
 				F6E39CE21F1A56E500A3E7D1 /* wall.jpg in Resources */,

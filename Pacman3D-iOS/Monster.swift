@@ -9,14 +9,14 @@
 import Foundation
 import SceneKit
 
-class Monster {
+class Monster: Equatable {
     
-    private var position: SCNVector3
+    private (set) var position: SCNVector3
     private var direction: Direction = .north
     
     private let level: Level
     private let scene: SCNScene
-    private var node: SCNNode?
+    private (set) var node: SCNNode?
     
     init(position: SCNVector3, level: Level, scene: SCNScene) {
         self.position = position
@@ -67,13 +67,13 @@ class Monster {
             }
             
             if direction == .north {
-                position = SCNVector3(x: node.position.x + 0.15, y: node.position.y, z: Float(z * 5))
+                position = SCNVector3(x: node.position.x + 0.1, y: node.position.y, z: Float(z * 5))
             } else if direction == .east {
-                position = SCNVector3(x: Float(x * 5), y: node.position.y, z: node.position.z + 0.15)
+                position = SCNVector3(x: Float(x * 5), y: node.position.y, z: node.position.z + 0.1)
             } else if direction == .south {
-                position = SCNVector3(x: node.position.x - 0.15, y: node.position.y, z: Float(z * 5))
+                position = SCNVector3(x: node.position.x - 0.1, y: node.position.y, z: Float(z * 5))
             } else if direction == .west {
-                position = SCNVector3(x: Float(x * 5), y: node.position.y, z: node.position.z - 0.15)
+                position = SCNVector3(x: Float(x * 5), y: node.position.y, z: node.position.z - 0.1)
             }
             node.position = position
         }
@@ -101,5 +101,9 @@ class Monster {
         }
         
         return directions
+    }
+    
+    public static func ==(lhs: Monster, rhs: Monster) -> Bool {
+        return lhs.node == rhs.node
     }
 }
