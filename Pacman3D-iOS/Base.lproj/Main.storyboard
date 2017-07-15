@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Main View Controller-->
         <scene sceneID="p6t-FQ-akW">
             <objects>
-                <viewController id="uj1-yy-esL" sceneMemberID="viewController">
+                <viewController id="uj1-yy-esL" customClass="MainViewController" customModule="Pacman3D_iOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YLp-lV-ETO"/>
                         <viewControllerLayoutGuide type="bottom" id="h1R-Z6-Vqf"/>

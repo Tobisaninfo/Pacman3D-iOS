@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F6090F531F1AA9270003F688 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = F6090F521F1AA9270003F688 /* pause.png */; };
+		F6090F561F1AAEB40003F688 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6090F551F1AAEB40003F688 /* MainViewController.swift */; };
+		F6090F5A1F1AAEED0003F688 /* pacman_beginning.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F571F1AAEED0003F688 /* pacman_beginning.wav */; };
+		F6090F5B1F1AAEED0003F688 /* pacman_chomp.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F581F1AAEED0003F688 /* pacman_chomp.wav */; };
+		F6090F5C1F1AAEED0003F688 /* pacman_death.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F591F1AAEED0003F688 /* pacman_death.wav */; };
 		F6621DF41F12B09800F9E486 /* TouchInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */; };
 		F6621DF61F12B82200F9E486 /* MotionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF51F12B82200F9E486 /* MotionInput.swift */; };
 		F6BEB8071EF7F99B00EDAA66 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB8061EF7F99B00EDAA66 /* AppDelegate.swift */; };
@@ -49,6 +53,10 @@
 
 /* Begin PBXFileReference section */
 		F6090F521F1AA9270003F688 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
+		F6090F551F1AAEB40003F688 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		F6090F571F1AAEED0003F688 /* pacman_beginning.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_beginning.wav; sourceTree = "<group>"; };
+		F6090F581F1AAEED0003F688 /* pacman_chomp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_chomp.wav; sourceTree = "<group>"; };
+		F6090F591F1AAEED0003F688 /* pacman_death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_death.wav; sourceTree = "<group>"; };
 		F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInputHandler.swift; sourceTree = "<group>"; };
 		F6621DF51F12B82200F9E486 /* MotionInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionInput.swift; sourceTree = "<group>"; };
 		F6BEB8031EF7F99B00EDAA66 /* Pacman3D-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pacman3D-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +113,9 @@
 		F6090F541F1AA92D0003F688 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F6090F571F1AAEED0003F688 /* pacman_beginning.wav */,
+				F6090F581F1AAEED0003F688 /* pacman_chomp.wav */,
+				F6090F591F1AAEED0003F688 /* pacman_death.wav */,
 				F6FEE71A1EF8135200C1DE35 /* level.plv */,
 				F6E39CE11F1A56E500A3E7D1 /* wall.jpg */,
 				F6E39CE31F1A583B00A3E7D1 /* floor.jpg */,
@@ -140,6 +151,7 @@
 				F6FEE7141EF80AB900C1DE35 /* Level */,
 				F6FEE7191EF80C1900C1DE35 /* Uilts */,
 				F6BEB8061EF7F99B00EDAA66 /* AppDelegate.swift */,
+				F6090F551F1AAEB40003F688 /* MainViewController.swift */,
 				F6BEB80A1EF7F99B00EDAA66 /* GameViewController.swift */,
 				F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */,
 				F6621DF51F12B82200F9E486 /* MotionInput.swift */,
@@ -301,8 +313,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6090F5B1F1AAEED0003F688 /* pacman_chomp.wav in Resources */,
+				F6090F5C1F1AAEED0003F688 /* pacman_death.wav in Resources */,
 				F6BEB8091EF7F99B00EDAA66 /* art.scnassets in Resources */,
 				F6E39CE41F1A583B00A3E7D1 /* floor.jpg in Resources */,
+				F6090F5A1F1AAEED0003F688 /* pacman_beginning.wav in Resources */,
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
 				F6BEB80E1EF7F99B00EDAA66 /* Main.storyboard in Resources */,
@@ -335,6 +350,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6621DF61F12B82200F9E486 /* MotionInput.swift in Sources */,
+				F6090F561F1AAEB40003F688 /* MainViewController.swift in Sources */,
 				F6E4AE451F0CF1DF004BFDBF /* Direction.swift in Sources */,
 				F6FEE7181EF80C1500C1DE35 /* StreamReader.swift in Sources */,
 				F6E39CEC1F1A7D5500A3E7D1 /* BorderButton.swift in Sources */,

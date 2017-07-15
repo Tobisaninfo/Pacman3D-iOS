@@ -11,6 +11,7 @@ import QuartzCore
 import SceneKit
 import SpriteKit
 import CoreMotion
+import AVFoundation
 
 class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDelegate, SCNSceneRendererDelegate, PlayerDelegate {
 
@@ -40,12 +41,25 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     var player: Player!
     var monsters: [Monster]!
 
+    // MARK: - Sounds
+    var soundChomp: AVAudioPlayer?
+    var soundDeath: AVAudioPlayer?
+    
     // MARK: - Input Handler
     private var touchInputHandler: TouchInputHandler!
     private var motionInput: MotionInput?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let url = Bundle.main.url(forResource: "pacman_chomp", withExtension: "wav") {
+            soundChomp = try? AVAudioPlayer(contentsOf: url)
+            soundChomp?.prepareToPlay()
+        }
+        if let url = Bundle.main.url(forResource: "pacman_death", withExtension: "wav") {
+            soundDeath = try? AVAudioPlayer(contentsOf: url)
+            soundDeath?.prepareToPlay()
+        }
         
         monsters = []
         
@@ -158,6 +172,8 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
             let monster = contact.nodeA.name ?? "" == "Monster" ? contact.nodeA : contact.nodeB
             monster.removeFromParentNode()
             
+            soundDeath?.play()
+            
             for m in monsters {
                 if let n =  m.node {
                     if n == monster {
@@ -176,6 +192,7 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     
     func player(_ player: Player, scoreDidUpdate score: Int) {
         pointsLabel.text = "\(player.points) Punkte"
+        soundChomp?.play()
     }
     
     func player(_ player: Player, didCollectScoreAt position: (x: Int, z: Int)) {
