@@ -12,7 +12,20 @@ import SceneKit
 class Monster: Equatable {
     
     private (set) var position: SCNVector3
-    private var direction: Direction = .north
+    private var direction: Direction = .north {
+        didSet {
+            switch direction {
+            case .north:
+                node?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: 1.5 * Float.pi - Float.pi * 0.25)
+            case .east:
+                node?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: 1.0 * Float.pi - Float.pi * 0.25)
+            case .south:
+                node?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: 0.5 * Float.pi - Float.pi * 0.25)
+            case .west:
+                node?.rotation = SCNVector4(x: 0, y: 1, z: 0, w: 2.0 * Float.pi - Float.pi * 0.25)
+            }
+        }
+    }
     
     private let level: Level
     private let scene: SCNScene
