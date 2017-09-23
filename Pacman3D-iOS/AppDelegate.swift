@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension Array where Element: Equatable {
-    mutating func remove(object : Generator.Element) {
+    mutating func remove(object : Iterator.Element) {
         if let index = self.index(of: object) {
             self.remove(at: index)
         }

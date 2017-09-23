@@ -300,7 +300,7 @@ class GameViewController: UIViewController, SKSceneDelegate, SCNPhysicsContactDe
     }
     
 
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+    @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
     }
     
     override var shouldAutorotate: Bool {
