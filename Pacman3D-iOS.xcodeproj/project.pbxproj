@@ -12,6 +12,7 @@
 		F6090F5A1F1AAEED0003F688 /* pacman_beginning.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F571F1AAEED0003F688 /* pacman_beginning.wav */; };
 		F6090F5B1F1AAEED0003F688 /* pacman_chomp.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F581F1AAEED0003F688 /* pacman_chomp.wav */; };
 		F6090F5C1F1AAEED0003F688 /* pacman_death.wav in Resources */ = {isa = PBXBuildFile; fileRef = F6090F591F1AAEED0003F688 /* pacman_death.wav */; };
+		F6217C781FB770550051DE7B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F6217C771FB770550051DE7B /* README.md */; };
 		F6621DF41F12B09800F9E486 /* TouchInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */; };
 		F6621DF61F12B82200F9E486 /* MotionInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6621DF51F12B82200F9E486 /* MotionInput.swift */; };
 		F6BEB8071EF7F99B00EDAA66 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6BEB8061EF7F99B00EDAA66 /* AppDelegate.swift */; };
@@ -57,6 +58,7 @@
 		F6090F571F1AAEED0003F688 /* pacman_beginning.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_beginning.wav; sourceTree = "<group>"; };
 		F6090F581F1AAEED0003F688 /* pacman_chomp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_chomp.wav; sourceTree = "<group>"; };
 		F6090F591F1AAEED0003F688 /* pacman_death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pacman_death.wav; sourceTree = "<group>"; };
+		F6217C771FB770550051DE7B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F6621DF31F12B09800F9E486 /* TouchInputHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInputHandler.swift; sourceTree = "<group>"; };
 		F6621DF51F12B82200F9E486 /* MotionInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionInput.swift; sourceTree = "<group>"; };
 		F6BEB8031EF7F99B00EDAA66 /* Pacman3D-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pacman3D-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +130,7 @@
 		F6BEB7FA1EF7F99B00EDAA66 = {
 			isa = PBXGroup;
 			children = (
+				F6217C771FB770550051DE7B /* README.md */,
 				F6BEB8051EF7F99B00EDAA66 /* Pacman3D-iOS */,
 				F6BEB81C1EF7F99B00EDAA66 /* Pacman3D-iOSTests */,
 				F6BEB8271EF7F99C00EDAA66 /* Pacman3D-iOSUITests */,
@@ -320,6 +323,7 @@
 				F6090F5C1F1AAEED0003F688 /* pacman_death.wav in Resources */,
 				F6BEB8091EF7F99B00EDAA66 /* art.scnassets in Resources */,
 				F6E39CE41F1A583B00A3E7D1 /* floor.jpg in Resources */,
+				F6217C781FB770550051DE7B /* README.md in Resources */,
 				F6090F5A1F1AAEED0003F688 /* pacman_beginning.wav in Resources */,
 				F6BEB8131EF7F99B00EDAA66 /* LaunchScreen.storyboard in Resources */,
 				F6BEB8101EF7F99B00EDAA66 /* Assets.xcassets in Resources */,
